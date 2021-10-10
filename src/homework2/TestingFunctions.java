@@ -32,9 +32,8 @@ public class TestingFunctions {
         }
 
         //Pop Front
-        l.popFront();
 
-        if (!l.contains(first)) {
+        if (l.popFront()) {
             System.out.println("popFront test - Success");
         } else {
             System.out.println("popFront test - Failure");
@@ -42,10 +41,8 @@ public class TestingFunctions {
 
 
         //Pop Back
-        Person curr = l.back();
-        l.popBack();
 
-        if (!l.contains(curr)) {
+        if (l.popBack()) {
             System.out.println("popBack test - Success");
         } else {
             System.out.println("popBack test - Failure");

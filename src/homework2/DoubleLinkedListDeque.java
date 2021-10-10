@@ -48,22 +48,16 @@ public class DoubleLinkedListDeque<T> implements DequeADT<T> {
 
     @Override
     public void pushBack(T value) {
-        Node node = new Node(value);
-        Node last = front;
-        node.next=null;
-
-        if (front==null){
-            node.prev=null;
-            front=node;
-
+        if(length==0){
+            back = new Node(value);
+            front=back;
+        }
+        else {
+            Node temp = new Node(value);
+            temp.prev= back;
+            back = temp;
 
         }
-        while (last.next!=null){
-            last=last.next;
-        }
-        last.next=node;
-        //node.prev=last;
-
         length++;
     }
 
@@ -74,9 +68,13 @@ public class DoubleLinkedListDeque<T> implements DequeADT<T> {
             front = front.next;
             if(front != null){
                 front.prev=null;
-                return true;
+
             }
+
             length--;
+            return true;
+
+
         }
         return false;
     }
