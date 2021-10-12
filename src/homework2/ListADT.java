@@ -9,7 +9,7 @@ public interface ListADT <T>{
    public void addLast(T elem);
    public void  addElementAt(T elem, int index);
    public T  getElementAt(int index);
-   public void  removeFirst();
+   public void  removeFirst() throws Exception;
    public void  removeLast();
    public  T first();
    public T last();

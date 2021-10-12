@@ -1,14 +1,16 @@
 package homework2;/*
 Author: Tigran Movsesyan
 Email: tigran_movsesyan@edu.aua.am
-Last Changed: 09/09/2021
+Last Changed: 11/10/2021
+
+Fully implemented, all functions are tested;
 */
 
 public class SingleLinkedList <T> implements ListADT<T> {
 
     private Node first;
     private Node last;
-    int size;
+    private int size;
 
   //Constructor
     public SingleLinkedList() {
@@ -37,11 +39,19 @@ public class SingleLinkedList <T> implements ListADT<T> {
     public void addFirst(T value) {
         Node node = new Node();
 
-        node.data = value;
-        node.next = null;
-        node.next =first;
-        first = node;
+        if(size==0){
+            first=last= new Node(value);
+
+        } else {
+
+            node.data = value;
+            node.next = null;
+            node.next = first;
+            first = node;
+        }
         size++;
+
+
 
     }
 
@@ -49,15 +59,26 @@ public class SingleLinkedList <T> implements ListADT<T> {
 
     @Override
     public void addLast(T value) {
-        Node n = new Node(value);
-        if (isEmpty()) {
-            last = first = n;
-        } else {
-            last.next = n;
-            last = n;
-        }
-        size++;
+       if (first == null) {
+           first = last = new Node(value);
 
+       } else{
+
+           Node node = new Node();
+           node.data = value;
+           node.next = null;
+           Node newFirst = first;
+
+           for (int i = 0; i <size-1 ; i++) {
+               newFirst = newFirst.next;
+           }
+           node.next = newFirst.next;
+           newFirst.next = node;
+
+
+
+       }
+        size++;
     }
 
     //Add element at certain index
@@ -71,12 +92,9 @@ public class SingleLinkedList <T> implements ListADT<T> {
 
             addFirst(value);
 
-        } else {
-
+        }  else  {
             for (int i = 0; i < index - 1; i++) {
-
                 n = n.next;
-
             }
             node.next = n.next;
             n.next = node;
@@ -88,7 +106,7 @@ public class SingleLinkedList <T> implements ListADT<T> {
    // Get element at certain index
     @Override
     public T getElementAt(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             return null;
         }
         Node temp = first;
@@ -101,10 +119,16 @@ public class SingleLinkedList <T> implements ListADT<T> {
 
 
     @Override
-    public void removeFirst() {
-        first = first.next;
-        size--;
+    public void removeFirst() throws Exception {
+        if(first==null){
+            return;
+        }
 
+        else {
+      first = first.next;
+      size--;
+
+        }
     }
 
     @Override
@@ -121,18 +145,19 @@ public class SingleLinkedList <T> implements ListADT<T> {
                 secondLast=secondLast.next;
             }
             secondLast.next=null;
+            last=secondLast;
         }
         size--;
     }
 
     @Override
     public T first() {
-        return first.data;
+        return getElementAt(0);
     }
 
     @Override
     public T last() {
-        return last.data;
+        return getElementAt(size-1);
     }
 
     @Override
@@ -144,6 +169,80 @@ public class SingleLinkedList <T> implements ListADT<T> {
     public int size() {
         return size;
     }
+
+   //Index of object
+    private int indexOf (Object o) {
+        int index = 0;
+        if (o == null) {
+            for ( Node x = first; x != null; x = x.next) {
+                if (x.data == null)
+                    return index;
+                index++;
+            }
+        } else {
+            for (Node x = first; x != null; x = x.next) {
+                if (o.equals(x.data))
+                    return index;
+                index++;
+            }
+        }
+        return -1;
+    }
+
+
+    //Adds an element before certain element
+
+    public boolean addBefore(T valueP, T valueB ) {
+        if(contains(valueP)){
+           int index= indexOf(valueP);
+           addElementAt(valueB,index);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    // Removes node at given index;
+    public  boolean removeAt (int index) throws Exception {
+
+        if (index > size){
+            return false;
+        }
+        if(index==0){
+          removeFirst();
+        } if(index==size){
+            removeLast();
+        }
+        else {
+            Node n = first;
+            Node n1;
+            for (int i = 0; i < index-1 ; i++) {
+                n = n.next;
+            }
+            n1=n.next;
+            n.next=n1.next;
+
+            last=n.next;
+            size--;
+        }
+        return true;
+
+    }
+
+    // Checks if value exists
+      private boolean contains(T value) {
+          Node currentNode = first;
+          Node searchVal = new Node(value);
+          while (currentNode != null) {
+              if (searchVal.data.equals(currentNode.data)) {
+                  return true;
+              }
+              currentNode = currentNode.next;
+          }
+          return false;
+      }
+
+
 
 
 
